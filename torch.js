@@ -7,7 +7,6 @@
 
 module.exports = {
   run: [
-
     // ------------------------------------------------------------
     // Limpiar torch previo + actualizar pip
     // ------------------------------------------------------------
@@ -17,10 +16,10 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip uninstall -y torch torchvision torchaudio || true",
-          "python -m pip install -U pip"
-        ]
-      }
+          "python -m pip uninstall -y torch torchvision torchaudio triton triton-windows || true",
+          "python -m pip install -U pip",
+        ],
+      },
     },
 
     // ============================================================
@@ -35,9 +34,10 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
+          "python -m pip install -U triton-windows",
+        ],
+      },
     },
 
     // AUTO + resto => cu128
@@ -48,9 +48,10 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          "python -m pip install -U triton-windows",
+        ],
+      },
     },
 
     // Explicit cu130
@@ -61,9 +62,10 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
+          'python -m pip install "triton-windows>=3.6,<3.7"',
+        ],
+      },
     },
 
     // Explicit cu128
@@ -74,9 +76,10 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch==2.9.1 torchvision==0.24.1 torchaudio==2.9.1 --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch==2.9.1 torchvision==0.24.1 torchaudio==2.9.1 --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          'python -m pip install "triton-windows>=3.5,<3.6"',
+        ],
+      },
     },
 
     // ============================================================
@@ -90,9 +93,10 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
+          "python -m pip install triton",
+        ],
+      },
     },
 
     {
@@ -102,9 +106,38 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          "python -m pip install triton",
+        ],
+      },
+    },
+
+    // Explicit cu130 - Linux NVIDIA
+    {
+      when: "{{platform === 'linux' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.10.0-cu130'}}",
+      method: "shell.run",
+      params: {
+        venv: "{{args && args.venv ? args.venv : null}}",
+        path: "{{args && args.path ? args.path : '.'}}",
+        message: [
+          "python -m pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
+          'python -m pip install "triton>=3.6,<3.7"',
+        ],
+      },
+    },
+
+    // Explicit cu128 - Linux NVIDIA
+    {
+      when: "{{platform === 'linux' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.9.1-cu128'}}",
+      method: "shell.run",
+      params: {
+        venv: "{{args && args.venv ? args.venv : null}}",
+        path: "{{args && args.path ? args.path : '.'}}",
+        message: [
+          "python -m pip install torch==2.9.1 torchvision==0.24.1 torchaudio==2.9.1 --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          'python -m pip install "triton>=3.5,<3.6"',
+        ],
+      },
     },
 
     // ============================================================
@@ -118,9 +151,9 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch torchvision torchaudio --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch torchvision torchaudio --force-reinstall --no-deps",
+        ],
+      },
     },
 
     {
@@ -130,9 +163,9 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps",
+        ],
+      },
     },
 
     // ============================================================
@@ -146,9 +179,9 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch-directml torchvision torchaudio numpy==1.26.4 --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch-directml torchvision torchaudio numpy==1.26.4 --force-reinstall --no-deps",
+        ],
+      },
     },
 
     // ============================================================
@@ -163,9 +196,9 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps",
+        ],
+      },
     },
 
     // Explicit ROCm
@@ -176,9 +209,9 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/rocm6.3 --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/rocm6.3 --force-reinstall --no-deps",
+        ],
+      },
     },
 
     // ============================================================
@@ -192,9 +225,9 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps"
-        ]
-      }
+          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps",
+        ],
+      },
     },
 
     // ------------------------------------------------------------
@@ -206,10 +239,9 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -c \"import torch; print('torch', torch.__version__); print('cuda_available', torch.cuda.is_available()); print('cuda_version', torch.version.cuda); print('mps_available', hasattr(torch.backends,'mps') and torch.backends.mps.is_available()); print('hip_version', getattr(torch.version,'hip',None))\""
-        ]
-      }
-    }
-
-  ]
+          "python -c \"import torch; print('torch', torch.__version__); print('cuda_available', torch.cuda.is_available()); print('cuda_version', torch.version.cuda); print('mps_available', hasattr(torch.backends,'mps') and torch.backends.mps.is_available()); print('hip_version', getattr(torch.version,'hip',None))\"",
+        ],
+      },
+    },
+  ],
 };
