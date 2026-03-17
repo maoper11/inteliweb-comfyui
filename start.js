@@ -21,13 +21,14 @@ module.exports = {
         on: [
           // ✅ Normal startup → capture URL (group 1 is URL)
           {
-            event: "/To see the GUI go to:\\s*(https?:\\/\\/[^\\s]+)/i",
+            event:
+              "/To see the GUI go to:\\s*(https?:\\/\\/[a-zA-Z0-9._-]+:\\d+)/i",
             done: true,
           },
 
           // ✅ Fallback if wording changes (group 1 is URL)
           {
-            event: "/starting server.*?(https?:\\/\\/[^\\s]+)/i",
+            event: "/starting server.*?(https?:\\/\\/[a-zA-Z0-9._-]+:\\d+)/i",
             done: true,
           },
 
@@ -65,8 +66,7 @@ module.exports = {
       method: "log",
       params: {
         type: "raw",
-        data:
-          "Restart Required — ComfyUI-Manager installed new dependencies. Restarting ComfyUI once more to apply them.",
+        data: "Restart Required — ComfyUI-Manager installed new dependencies. Restarting ComfyUI once more to apply them.",
       },
     },
     {
