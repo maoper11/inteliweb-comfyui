@@ -1,114 +1,333 @@
 ##########################################################################
+
 # --------------------------------------------------
+
 # Inteliweb AI — ComfyUI Pinokio Installer
+
 # https://www.youtube.com/@InteliwebAI
+
 # --------------------------------------------------
+
 # QUICK START (recommended for most users):
+
 #
+
 # COMFY_VER=latest
+
 # PYTHON_VER=3.12
+
 # TORCH_VARIANT=auto
+
 #
-# 👉 This will automatically pick the best Config for your GPU
+
+# 👉 Recommended default:
+
+# - installs latest stable ComfyUI
+
+# - uses Python 3.12
+
 # --------------------------------------------------
 
 ##########################################################################
+
+##########################################################################
+
 # COMFYUI VERSION
+
 #
-# Use:
-# - latest        → always newest stable version (RECOMMENDED)
-# - v0.12.0       → specific release tag (example)
+
+# Allowed values:
+
+# - latest → install the newest stable ComfyUI release (RECOMMENDED)
+
+# - v0.18.2 → example of a specific release tag
+
 #
+
+# Notes:
+
+# - Use "latest" for most users
+
+# - Use a fixed version only if you need to match an older workflow
+
+#
+
 # Examples:
+
 # COMFY_VER=latest
+
 # COMFY_VER=v0.12.0
+
 ##########################################################################
 COMFY_VER=latest
 
-
 ##########################################################################
+
 # PYTHON VERSION
+
 #
+
 # Allowed values:
-# 3.10   (compatibility with old nodes)
-# 3.11
-# 3.12   (RECOMMENDED)
-# 3.13   
+
+# - 3.10 → best compatibility with older custom nodes
+
+# - 3.11 → good balance
+
+# - 3.12 → RECOMMENDED for most users
+
+# - 3.13 → only if your nodes already support it
+
 #
+
+# Notes:
+
+# - If you are unsure, use 3.12
+
+# - If an old node fails, try 3.10
+
+#
+
 # Example:
+
 # PYTHON_VER=3.12
+
 ##########################################################################
 PYTHON_VER=3.12
 
-
 ##########################################################################
-# TORCH_VARIANT — GPU / CUDA SELECTION
+
+# TORCH_VARIANT — PyTorch / GPU backend
+
 #
-# Allowed values:
+
+# IMPORTANT:
+
+# "auto" installs the default STABLE option chosen for best compatibility.
+
 #
-# 👉 RECOMMENDED (auto detects best option for your GPU):
+
+# ==================================================
+
+# RECOMMENDED FOR MOST USERS
+
+# ==================================================
+
 # - auto
+
+# Default stable option:
+
+# • Windows NVIDIA → torch 2.10.0 + cu130
+
+# • Linux NVIDIA → torch 2.10.0 + cu130
+
+# • Windows AMD → DirectML
+
+# • Linux AMD → CPU fallback
+
+# • Apple Silicon → MPS build automatically
+
+# • Intel Mac → CPU build automatically
+
 #
-# NVIDIA (Windows / Linux):
-# - 2.9.1-cu128     (recommended for RTX 20/30/40)
-# - 2.10.0-cu130    (recommended for RTX 50)
+
+# ==================================================
+
+# NVIDIA (Windows / Linux)
+
+# ==================================================
+
+# - auto
+
+# Stable default. Best choice for most NVIDIA users.
+
 #
-# AMD:
-# - directml        (Windows AMD)
-# - 2.7.0-rocm6.3   (Linux AMD, ONLY if your GPU supports ROCm)
+
+# - latest-cu130
+
+# Installs the latest available PyTorch build from the cu130 channel.
+
+# Example: torch 2.11 cu130 when available.
+
+# Use only if you want to test newer versions.
+
+# NOT recommended as default for ComfyUI stability.
+
 #
-# CPU:
+
+# - 2.9.1-cu128
+
+# Legacy fallback for older environments, older wheels,
+
+# or workflows that specifically work better with cu128.
+
+#
+
+# ==================================================
+
+# AMD
+
+# ==================================================
+
+# Windows AMD:
+
+# - auto
+
+# - directml
+
+# Uses torch-directml.
+
+# This is the recommended AMD option on Windows.
+
+#
+
+# Linux AMD:
+
+# - auto
+
+# Uses CPU by default for maximum compatibility.
+
+#
+
+# - 2.7.0-rocm6.3
+
+# Use ONLY if:
+
+# • your AMD GPU supports ROCm
+
+# • your Linux system is configured for ROCm
+
+#
+
+# ==================================================
+
+# CPU ONLY
+
+# ==================================================
+
 # - cpu
+
+# Forces CPU mode on any platform.
+
 #
-# macOS:
-# Leave as: auto
+
+# ==================================================
+
+# macOS
+
+# ==================================================
+
+# Leave as:
+
+# - auto
+
+#
+
+# Behavior:
+
 # - Apple Silicon (M-series) → installs torch with MPS automatically
+
 # - Intel Mac → installs CPU version automatically
+
 #
+
+# ==================================================
+
+# SIMPLE RECOMMENDATIONS
+
+# ==================================================
+
+# Most users:
+
+# TORCH_VARIANT=auto
+
+#
+
+# Advanced NVIDIA users who want to test newest cu130:
+
+# TORCH_VARIANT=latest-cu130
+
+#
+
+# NVIDIA users who need a legacy fallback:
+
+# TORCH_VARIANT=2.9.1-cu128
+
+#
+
+# Windows AMD users:
+
+# TORCH_VARIANT=directml
+
+#
+
+# Linux AMD users with ROCm properly installed:
+
+# TORCH_VARIANT=2.7.0-rocm6.3
+
+#
+
 ##########################################################################
 TORCH_VARIANT=auto
 
 ##########################################################################
+
 # PINOKIO_SCRIPT_AUTOLAUNCH
+
 ##########################################################################
 PINOKIO_SCRIPT_AUTOLAUNCH=
 
 ##########################################################################
+
 # PINOKIO_SHARE_CLOUDFLARE
+
 ##########################################################################
 PINOKIO_SHARE_CLOUDFLARE=false
 
 ##########################################################################
+
 # PINOKIO_SHARE_PASSCODE
+
 ##########################################################################
 PINOKIO_SHARE_PASSCODE=
 
 ##########################################################################
+
 # PINOKIO_SCRIPT_DEFAULT
+
 ##########################################################################
 PINOKIO_SCRIPT_DEFAULT=true
 
 ##########################################################################
+
 # GRADIO_TEMP_DIR
+
 ##########################################################################
 GRADIO_TEMP_DIR=./cache/GRADIO_TEMP_DIR
 
 ##########################################################################
+
 # HF_HOME
+
 ##########################################################################
 HF_HOME=./cache/HF_HOME
 
 ##########################################################################
+
 # TORCH_HOME
+
 ##########################################################################
 TORCH_HOME=./cache/TORCH_HOME
 
 ##########################################################################
+
 # PINOKIO_SHARE_LOCAL
+
 ##########################################################################
 PINOKIO_SHARE_LOCAL=false
 
 ##########################################################################
+
 # PINOKIO_SHARE_LOCAL_PORT
+
 ##########################################################################
 PINOKIO_SHARE_LOCAL_PORT=

@@ -1,62 +1,22 @@
-// Script 1 (Modo A) — Básico, compatible con todo
-// - Sin xformers / flash / sage
-// - Con --no-deps (entorno controlado)
-// - Auto NVIDIA: RTX50->cu130, resto->cu128
-// - AMD Linux auto => CPU (ROCm solo explícito)
-// - macOS soportado
+// Script 1 revisado — estable por defecto
 
 module.exports = {
   run: [
-    // ------------------------------------------------------------
-    // Limpiar torch previo + actualizar pip
-    // ------------------------------------------------------------
     {
       method: "shell.run",
       params: {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip uninstall -y torch torchvision torchaudio triton triton-windows || true",
+          "python -m pip uninstall -y torch torchvision torchaudio triton triton-windows torch-directml xformers || true",
           "python -m pip install -U pip",
         ],
       },
     },
 
-    // ============================================================
-    // WINDOWS NVIDIA
-    // ============================================================
-
-    // AUTO + RTX 50 => cu130
+    // WINDOWS NVIDIA AUTO (stable default: torch 2.10.0-cu130)
     {
-      when: "{{platform === 'win32' && gpu === 'nvidia' && (['','auto'].includes(String(env.TORCH_VARIANT||'auto').toLowerCase())) && kernel.gpu_model && /50[0-9]{2}/.test(kernel.gpu_model)}}",
-      method: "shell.run",
-      params: {
-        venv: "{{args && args.venv ? args.venv : null}}",
-        path: "{{args && args.path ? args.path : '.'}}",
-        message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
-          "python -m pip install -U triton-windows",
-        ],
-      },
-    },
-
-    // AUTO + resto => cu128
-    {
-      when: "{{platform === 'win32' && gpu === 'nvidia' && (['','auto'].includes(String(env.TORCH_VARIANT||'auto').toLowerCase())) && (!kernel.gpu_model || !/50[0-9]{2}/.test(kernel.gpu_model))}}",
-      method: "shell.run",
-      params: {
-        venv: "{{args && args.venv ? args.venv : null}}",
-        path: "{{args && args.path ? args.path : '.'}}",
-        message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
-          "python -m pip install -U triton-windows",
-        ],
-      },
-    },
-
-    // Explicit cu130
-    {
-      when: "{{platform === 'win32' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.10.0-cu130'}}",
+      when: "{{platform === 'win32' && gpu === 'nvidia' && (['','auto'].includes(String(env.TORCH_VARIANT||'auto').toLowerCase()))}}",
       method: "shell.run",
       params: {
         venv: "{{args && args.venv ? args.venv : null}}",
@@ -68,7 +28,7 @@ module.exports = {
       },
     },
 
-    // Explicit cu128
+    // WINDOWS NVIDIA 2.9.1-cu128
     {
       when: "{{platform === 'win32' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.9.1-cu128'}}",
       method: "shell.run",
@@ -82,39 +42,23 @@ module.exports = {
       },
     },
 
-    // ============================================================
-    // LINUX NVIDIA (misma lógica)
-    // ============================================================
-
+    // WINDOWS NVIDIA latest-cu130
     {
-      when: "{{platform === 'linux' && gpu === 'nvidia' && (['','auto'].includes(String(env.TORCH_VARIANT||'auto').toLowerCase())) && kernel.gpu_model && /50[0-9]{2}/.test(kernel.gpu_model)}}",
+      when: "{{platform === 'win32' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='latest-cu130'}}",
       method: "shell.run",
       params: {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
           "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
-          "python -m pip install triton",
+          "python -m pip install -U triton-windows",
         ],
       },
     },
 
+    // LINUX NVIDIA AUTO (stable default: torch 2.10.0-cu130)
     {
-      when: "{{platform === 'linux' && gpu === 'nvidia' && (['','auto'].includes(String(env.TORCH_VARIANT||'auto').toLowerCase())) && (!kernel.gpu_model || !/50[0-9]{2}/.test(kernel.gpu_model))}}",
-      method: "shell.run",
-      params: {
-        venv: "{{args && args.venv ? args.venv : null}}",
-        path: "{{args && args.path ? args.path : '.'}}",
-        message: [
-          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
-          "python -m pip install triton",
-        ],
-      },
-    },
-
-    // Explicit cu130 - Linux NVIDIA
-    {
-      when: "{{platform === 'linux' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.10.0-cu130'}}",
+      when: "{{platform === 'linux' && gpu === 'nvidia' && (['','auto'].includes(String(env.TORCH_VARIANT||'auto').toLowerCase()))}}",
       method: "shell.run",
       params: {
         venv: "{{args && args.venv ? args.venv : null}}",
@@ -126,7 +70,7 @@ module.exports = {
       },
     },
 
-    // Explicit cu128 - Linux NVIDIA
+    // LINUX NVIDIA 2.9.1-cu128
     {
       when: "{{platform === 'linux' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.9.1-cu128'}}",
       method: "shell.run",
@@ -140,10 +84,21 @@ module.exports = {
       },
     },
 
-    // ============================================================
-    // macOS
-    // ============================================================
+    // LINUX NVIDIA latest-cu130
+    {
+      when: "{{platform === 'linux' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='latest-cu130'}}",
+      method: "shell.run",
+      params: {
+        venv: "{{args && args.venv ? args.venv : null}}",
+        path: "{{args && args.path ? args.path : '.'}}",
+        message: [
+          "python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
+          "python -m pip install triton",
+        ],
+      },
+    },
 
+    // macOS ARM64
     {
       when: "{{platform === 'darwin' && arch === 'arm64'}}",
       method: "shell.run",
@@ -156,6 +111,7 @@ module.exports = {
       },
     },
 
+    // macOS x64
     {
       when: "{{platform === 'darwin' && arch === 'x64'}}",
       method: "shell.run",
@@ -168,10 +124,7 @@ module.exports = {
       },
     },
 
-    // ============================================================
     // WINDOWS AMD (DirectML)
-    // ============================================================
-
     {
       when: "{{platform === 'win32' && gpu === 'amd' && (['','auto','directml'].includes(String(env.TORCH_VARIANT||'auto').toLowerCase()))}}",
       method: "shell.run",
@@ -179,16 +132,13 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -m pip install torch-directml torchvision torchaudio numpy==1.26.4 --force-reinstall --no-deps",
+          "python -m pip install numpy==1.26.4 --force-reinstall",
+          "python -m pip install torch-directml torch torchvision torchaudio --force-reinstall",
         ],
       },
     },
 
-    // ============================================================
-    // LINUX AMD
-    // ============================================================
-
-    // Auto => CPU
+    // LINUX AMD AUTO => CPU
     {
       when: "{{platform === 'linux' && gpu === 'amd' && (['','auto'].includes(String(env.TORCH_VARIANT||'auto').toLowerCase()))}}",
       method: "shell.run",
@@ -201,7 +151,7 @@ module.exports = {
       },
     },
 
-    // Explicit ROCm
+    // LINUX AMD ROCm
     {
       when: "{{platform === 'linux' && gpu === 'amd' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.7.0-rocm6.3'}}",
       method: "shell.run",
@@ -214,10 +164,7 @@ module.exports = {
       },
     },
 
-    // ============================================================
     // CPU fallback universal
-    // ============================================================
-
     {
       when: "{{String(env.TORCH_VARIANT||'').toLowerCase()==='cpu'}}",
       method: "shell.run",
@@ -230,16 +177,14 @@ module.exports = {
       },
     },
 
-    // ------------------------------------------------------------
-    // Sanity check final
-    // ------------------------------------------------------------
+    // SANITY CHECK
     {
       method: "shell.run",
       params: {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message: [
-          "python -c \"import torch; print('torch', torch.__version__); print('cuda_available', torch.cuda.is_available()); print('cuda_version', torch.version.cuda); print('mps_available', hasattr(torch.backends,'mps') and torch.backends.mps.is_available()); print('hip_version', getattr(torch.version,'hip',None))\"",
+          "python -c \"import torch; print('torch', torch.__version__); print('cuda_available', torch.cuda.is_available()); print('cuda_version', torch.version.cuda); print('mps_available', hasattr(torch.backends, 'mps') and torch.backends.mps.is_available()); print('hip_version', getattr(torch.version, 'hip', None))\"",
         ],
       },
     },

@@ -1,12 +1,12 @@
 module.exports = async (kernel, info) => {
-
   const run = [
     // 1) Clone ComfyUI into ./app
     {
       method: "shell.run",
       params: {
-        message: "git clone --branch {{ (() => { let ver = String(env.COMFY_VER || 'latest').trim().toLowerCase(); if (ver === 'latest') return 'master'; if (/^v/.test(ver)) return ver; if (/^\\d/.test(ver)) return 'v' + ver; return ver; })() }} --depth 1 https://github.com/comfyanonymous/ComfyUI app"
-      }
+        message:
+          "git clone --branch {{ (() => { let ver = String(env.COMFY_VER || 'latest').trim().toLowerCase(); if (ver === 'latest') return 'master'; if (/^v/.test(ver)) return ver; if (/^\\d/.test(ver)) return 'v' + ver; return ver; })() }} --depth 1 https://github.com/comfyanonymous/ComfyUI app",
+      },
     },
 
     // 2) Optional examples repo (workflows)
@@ -23,8 +23,8 @@ module.exports = async (kernel, info) => {
       method: "shell.run",
       params: {
         message: "git clone https://github.com/ltdrdata/ComfyUI-Manager",
-        path: "app/custom_nodes"
-      }
+        path: "app/custom_nodes",
+      },
     },
 
     // 4) Crear venv con Python
@@ -56,7 +56,7 @@ module.exports = async (kernel, info) => {
           "uv pip install -r requirements.txt",
           "uv pip install -r custom_nodes/ComfyUI-Manager/requirements.txt",
           "uv pip install -U bitsandbytes",
-          "uv pip install -U requests"
+          "uv pip install -U requests",
         ],
       },
     },
@@ -68,9 +68,9 @@ module.exports = async (kernel, info) => {
         uri: "torch.js",
         params: {
           venv: "env",
-          path: "app"
-        }
-      }
+          path: "app",
+        },
+      },
     },
 
     // 7) Link model folders to Pinokio drive
@@ -95,9 +95,8 @@ module.exports = async (kernel, info) => {
           style_models: "app/models/style_models",
           photomaker: "app/models/photomaker",
           diffusion_models: "app/models/diffusion_models",
-          text_encoders: "app/models/text_encoders"
-
-
+          text_encoders: "app/models/text_encoders",
+          latent_upscale_models: "app/models/latent_upscale_models",
         },
         peers: [
           "https://github.com/maoper11/inteliweb-comfyui.git",
@@ -105,9 +104,9 @@ module.exports = async (kernel, info) => {
           "https://github.com/cocktailpeanut/fluxgym.git",
           "https://github.com/cocktailpeanutlabs/automatic1111.git",
           "https://github.com/cocktailpeanutlabs/fooocus.git",
-          "https://github.com/pinokiofactory/stable-diffusion-webui-forge.git"
-        ]
-      }
+          "https://github.com/pinokiofactory/stable-diffusion-webui-forge.git",
+        ],
+      },
     },
 
     // output link
@@ -121,9 +120,9 @@ module.exports = async (kernel, info) => {
           "https://github.com/cocktailpeanut/fluxgym.git",
           "https://github.com/cocktailpeanutlabs/automatic1111.git",
           "https://github.com/cocktailpeanutlabs/fooocus.git",
-          "https://github.com/pinokiofactory/stable-diffusion-webui-forge.git"
-        ]
-      }
+          "https://github.com/pinokiofactory/stable-diffusion-webui-forge.git",
+        ],
+      },
     },
 
     // 8) Optional Flux Schnell autodownload
@@ -147,19 +146,19 @@ module.exports = async (kernel, info) => {
         venv: "env",
         env: {
           PYTORCH_ENABLE_MPS_FALLBACK: "1",
-          TOKENIZERS_PARALLELISM: "false"
+          TOKENIZERS_PARALLELISM: "false",
         },
         path: "app",
         message: [
-          "{{platform === 'win32' && gpu === 'amd' ? 'python main.py --directml' : 'python main.py'}}"
+          "{{platform === 'win32' && gpu === 'amd' ? 'python main.py --directml' : 'python main.py'}}",
         ],
         on: [
           { event: "/http:\\/\\/[a-zA-Z0-9.]+:[0-9]+/", kill: true },
           { event: "/errno/i", break: false },
-          { event: "/error:/i", break: false }
-        ]
-      }
-    }
+          { event: "/error:/i", break: false },
+        ],
+      },
+    },
 
     // 10) Optional extra workflows
     // {
@@ -180,6 +179,6 @@ module.exports = async (kernel, info) => {
 
   return {
     run,
-    requires: { bundle: "ai" }
+    requires: { bundle: "ai" },
   };
 };
