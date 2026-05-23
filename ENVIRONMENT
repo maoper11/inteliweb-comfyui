@@ -154,6 +154,16 @@ PYTHON_VER=3.12
 
 #
 
+# - 2.10.0-cu130
+
+# Recommended for Flash Attention wheels,
+
+# or workflows that specifically work better with 2.10.0-cu130.
+
+#
+
+# - 2.8.0-cu128
+
 # - 2.9.1-cu128
 
 # Legacy fallback for older environments, older wheels,
@@ -250,7 +260,7 @@ PYTHON_VER=3.12
 
 # NVIDIA users who need a legacy fallback:
 
-# TORCH_VARIANT=2.9.1-cu128
+# TORCH_VARIANT=2.9.1-cu128 or 2.8.0-cu128
 
 #
 

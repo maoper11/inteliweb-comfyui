@@ -28,6 +28,34 @@ module.exports = {
       },
     },
 
+    // WINDOWS NVIDIA 2.10.0-cu130
+    {
+      when: "{{platform === 'win32' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.10.0-cu130'}}",
+      method: "shell.run",
+      params: {
+        venv: "{{args && args.venv ? args.venv : null}}",
+        path: "{{args && args.path ? args.path : '.'}}",
+        message: [
+          "python -m pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
+          'python -m pip install "triton-windows>=3.6,<3.7"',
+        ],
+      },
+    },
+
+    // WINDOWS NVIDIA 2.8.0-cu128
+    {
+      when: "{{platform === 'win32' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.8.0-cu128'}}",
+      method: "shell.run",
+      params: {
+        venv: "{{args && args.venv ? args.venv : null}}",
+        path: "{{args && args.path ? args.path : '.'}}",
+        message: [
+          "python -m pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          'python -m pip install "triton-windows>=3.4,<3.5"',
+        ],
+      },
+    },
+
     // WINDOWS NVIDIA 2.9.1-cu128
     {
       when: "{{platform === 'win32' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.9.1-cu128'}}",
@@ -66,6 +94,34 @@ module.exports = {
         message: [
           "python -m pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
           'python -m pip install "triton>=3.6,<3.7"',
+        ],
+      },
+    },
+
+    // LINUX NVIDIA 2.10.0-cu130
+    {
+      when: "{{platform === 'linux' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.10.0-cu130'}}",
+      method: "shell.run",
+      params: {
+        venv: "{{args && args.venv ? args.venv : null}}",
+        path: "{{args && args.path ? args.path : '.'}}",
+        message: [
+          "python -m pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130 --force-reinstall --no-deps",
+          'python -m pip install "triton>=3.6,<3.7"',
+        ],
+      },
+    },
+
+    // LINUX NVIDIA 2.8.0-cu128
+    {
+      when: "{{platform === 'linux' && gpu === 'nvidia' && String(env.TORCH_VARIANT||'').toLowerCase()==='2.8.0-cu128'}}",
+      method: "shell.run",
+      params: {
+        venv: "{{args && args.venv ? args.venv : null}}",
+        path: "{{args && args.path ? args.path : '.'}}",
+        message: [
+          "python -m pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps",
+          'python -m pip install "triton>=3.4,<3.5"',
         ],
       },
     },
