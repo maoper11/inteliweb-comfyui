@@ -97,6 +97,11 @@ module.exports = async (kernel, info) => {
           diffusion_models: "app/models/diffusion_models",
           text_encoders: "app/models/text_encoders",
           latent_upscale_models: "app/models/latent_upscale_models",
+          geometry_estimation: "app/models/geometry_estimation",
+          frame_interpolation: "app/models/frame_interpolation",
+          detection: "app/models/detection",
+          audio_encoders: "app/models/audio_encoders",
+          background_removal: "app/models/background_removal",
         },
         peers: [
           "https://github.com/maoper11/inteliweb-comfyui.git",
