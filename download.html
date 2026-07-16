@@ -1,65 +1,178 @@
 <html>
-<head>
-<style>
-html,body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-}
-form {
-  max-width: 600px;
-  width: 100%;
-  font-family: Sans-serif;
-  letter-spacing: -1px;
- }
- input[type=url] {
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  border: none;
-  background: rgba(0,0,0,0.1);
- }
- button {
-  border: none;
-  background: black;
-  color: white;
-  margin-top: 10px;
-  width: 100%;
-  border-radius: 5px;
-  padding: 10px;
- }
- select {
-  padding: 5px 10px;
-  margin-top: 10px;
-  background: rgba(0,0,0,0.1);
-  border: none;
- }
-</style>
-</head>
-<body>
-<form>
-  <h1>Download Stable Diffusion Checkpoints</h1>
-  <input id='url' type='url' placeholder="enter the .safetensors model url">
-  <select>
-    <option value='app/models/checkpoints'>Checkpoint</option>
-    <option value='app/models/loras'>Lora</option>
-  </select>
-  <button>Download</button>
-</form>
-<script>
-document.querySelector("form").addEventListener("submit", (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  const path = document.querySelector("select").value
-  const u = "download.json?url=" + document.querySelector("#url").value + "&path=" + path
-  console.log(u)
-  debugger;
-  location.href  = u
-})
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+      }
+
+      form {
+        max-width: 600px;
+        width: 100%;
+        padding: 25px;
+        box-sizing: border-box;
+        font-family: Sans-serif;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+      }
+
+      .description {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #555;
+        letter-spacing: normal;
+      }
+
+      input[type="url"],
+      select {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        border: none;
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      select {
+        margin-top: 10px;
+      }
+
+      button {
+        border: none;
+        background: black;
+        color: white;
+        margin-top: 10px;
+        width: 100%;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #222;
+      }
+    </style>
+  </head>
+
+  <body>
+    <form id="download-form">
+      <h1>Download ComfyUI Models</h1>
+
+      <p class="description">
+        Enter the direct URL of the model file and select its destination
+        folder.
+      </p>
+
+      <input
+        id="url"
+        type="url"
+        required
+        placeholder="Enter the model download URL"
+      />
+
+      <select id="path" required>
+        <optgroup label="Main models">
+          <option value="app/models/checkpoints">Checkpoints</option>
+          <option value="app/models/diffusion_models">Diffusion Models</option>
+          <option value="app/models/unet">UNet</option>
+          <option value="app/models/diffusers">Diffusers</option>
+        </optgroup>
+
+        <optgroup label="LoRA and conditioning">
+          <option value="app/models/loras">LoRAs</option>
+          <option value="app/models/controlnet">ControlNet</option>
+          <option value="app/models/embeddings">Embeddings</option>
+          <option value="app/models/hypernetworks">Hypernetworks</option>
+          <option value="app/models/gligen">GLIGEN</option>
+          <option value="app/models/style_models">Style Models</option>
+          <option value="app/models/model_patches">Model Patches</option>
+        </optgroup>
+
+        <optgroup label="Text and vision encoders">
+          <option value="app/models/clip">CLIP</option>
+          <option value="app/models/clip_vision">CLIP Vision</option>
+          <option value="app/models/text_encoders">Text Encoders</option>
+          <option value="app/models/audio_encoders">Audio Encoders</option>
+        </optgroup>
+
+        <optgroup label="VAE">
+          <option value="app/models/vae">VAE</option>
+          <option value="app/models/vae_approx">VAE Approx</option>
+        </optgroup>
+
+        <optgroup label="Upscaling and interpolation">
+          <option value="app/models/upscale_models">Upscale Models</option>
+          <option value="app/models/latent_upscale_models">
+            Latent Upscale Models
+          </option>
+          <option value="app/models/frame_interpolation">
+            Frame Interpolation
+          </option>
+          <option value="app/models/optical_flow">Optical Flow</option>
+        </optgroup>
+
+        <optgroup label="Detection and image processing">
+          <option value="app/models/detection">Detection</option>
+          <option value="app/models/background_removal">
+            Background Removal
+          </option>
+          <option value="app/models/geometry_estimation">
+            Geometry Estimation
+          </option>
+          <option value="app/models/photomaker">PhotoMaker</option>
+        </optgroup>
+
+        <optgroup label="Advanced">
+          <option value="app/models/configs">Configs</option>
+        </optgroup>
+      </select>
+
+      <button type="submit">Download</button>
+    </form>
+
+    <script>
+      document
+        .querySelector("#download-form")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const urlInput = document.querySelector("#url");
+          const pathSelect = document.querySelector("#path");
+
+          const modelUrl = urlInput.value.trim();
+          const destinationPath = pathSelect.value;
+
+          try {
+            const parsedUrl = new URL(modelUrl);
+
+            if (
+              parsedUrl.protocol !== "http:" &&
+              parsedUrl.protocol !== "https:"
+            ) {
+              throw new Error("Unsupported URL protocol");
+            }
+          } catch (error) {
+            alert("Please enter a valid HTTP or HTTPS URL.");
+            return;
+          }
+
+          const parameters = new URLSearchParams({
+            url: modelUrl,
+            path: destinationPath,
+          });
+
+          location.href = "download.json?" + parameters.toString();
+        });
+    </script>
+  </body>
 </html>
