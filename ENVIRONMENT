@@ -9,7 +9,6 @@
 # PYTHON_VER=3.12
 # TORCH_VARIANT=auto
 # COMFY_CLI_VER=1.12.0
-# COMFY_NO_TELEMETRY=1
 #
 ##########################################################################
 
@@ -75,14 +74,3 @@ TORCH_VARIANT=auto
 # 1.12.0 is the version validated with this installer branch.
 ##########################################################################
 COMFY_CLI_VER=1.12.0
-
-##########################################################################
-# COMFY-CLI TELEMETRY
-#
-# - 1     → explicitly disable comfy-cli telemetry (RECOMMENDED)
-# - empty → do not set the explicit telemetry opt-out variable
-#
-# Pinokio launches comfy-cli with --skip-prompt, so automated starts never
-# wait for an interactive consent question.
-##########################################################################
-COMFY_NO_TELEMETRY=1
