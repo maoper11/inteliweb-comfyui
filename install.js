@@ -66,7 +66,7 @@ module.exports = async (kernel, info) => {
         venv: "env",
         path: "app",
         env: {
-          COMFY_NO_TELEMETRY: "1",
+          COMFY_NO_TELEMETRY: "{{env.COMFY_NO_TELEMETRY || ''}}",
         },
         message: [
           "python -m pip install comfy-cli=={{env.COMFY_CLI_VER || '1.12.0'}}",
@@ -141,7 +141,6 @@ module.exports = async (kernel, info) => {
         env: {
           PYTORCH_ENABLE_MPS_FALLBACK: "1",
           TOKENIZERS_PARALLELISM: "false",
-          COMFY_NO_TELEMETRY: "1",
         },
         path: "app",
         message: [
