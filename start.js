@@ -12,7 +12,7 @@ module.exports = {
         env: {
           PYTORCH_ENABLE_MPS_FALLBACK: "1",
           TOKENIZERS_PARALLELISM: "false",
-          COMFY_NO_TELEMETRY: "{{env.COMFY_NO_TELEMETRY || ''}}",
+          COMFY_NO_TELEMETRY: "1",
         },
         message: [
           "{{platform === 'win32' && gpu === 'amd' ? 'python -m comfy_cli --here --skip-prompt launch -- --directml --listen 127.0.0.1 --port 8188' : 'python -m comfy_cli --here --skip-prompt launch -- --listen 127.0.0.1 --port 8188'}}",
