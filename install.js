@@ -59,19 +59,18 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // 6) Install and validate comfy-cli in app/env
+    // 6) Install comfy-cli in app/env
     {
       method: "shell.run",
       params: {
         venv: "env",
         path: "app",
         env: {
-          COMFY_NO_TELEMETRY: "{{env.COMFY_NO_TELEMETRY || ''}}",
+          COMFY_NO_TELEMETRY: "1",
         },
         message: [
           "python -m pip install comfy-cli=={{env.COMFY_CLI_VER || '1.12.0'}}",
           "python -m comfy_cli --version",
-          "python -m comfy_cli --here --skip-prompt which",
         ],
       },
     },
@@ -147,7 +146,7 @@ module.exports = async (kernel, info) => {
           "{{platform === 'win32' && gpu === 'amd' ? 'python main.py --directml --listen 127.0.0.1 --port 8188' : 'python main.py --listen 127.0.0.1 --port 8188'}}",
         ],
         on: [
-          { event: "/http:\\/\\/[a-zA-Z0-9._-]+:[0-9]+/", kill: true },
+          { event: "/http:\\/\\/[a-zA-Z0-9.]+:[0-9]+/", kill: true },
           { event: "/errno/i", break: false },
           { event: "/error:/i", break: false },
         ],
