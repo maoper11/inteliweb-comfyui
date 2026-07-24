@@ -32,11 +32,16 @@ COMFY_VER=latest
 PYTHON_VER=3.12
 TORCH_VARIANT=auto
 COMFY_CLI_VER=1.12.0
+COMFY_NO_TELEMETRY=1
 ```
 
 The installer automatically selects the configured PyTorch build, creates an
-isolated environment, installs ComfyUI-Manager and installs the pinned
-`comfy-cli` supervisor.
+isolated environment, installs ComfyUI-Manager and installs the selected
+`comfy-cli` supervisor version.
+
+Only these five user-facing options are exposed. Pinokio sharing, autolaunch
+and cache variables are left to Pinokio's own defaults instead of being shown
+in the installer configuration screen.
 
 ---
 
@@ -86,11 +91,9 @@ python -m comfy_cli --version
 python -m comfy_cli --here --skip-prompt which
 ```
 
-Telemetry is disabled for automated Pinokio launches with:
-
-```text
-COMFY_NO_TELEMETRY=1
-```
+`COMFY_NO_TELEMETRY=1` explicitly disables comfy-cli telemetry. Leaving it
+empty stops setting that explicit opt-out variable, while `--skip-prompt`
+still prevents automated Pinokio launches from waiting for interactive input.
 
 ---
 
@@ -143,7 +146,8 @@ Leave `TORCH_VARIANT=auto`:
 ## 🔄 Update and Reset
 
 **Update** refreshes the installer, ComfyUI when `COMFY_VER=latest`,
-ComfyUI-Manager, their Python requirements and the pinned `comfy-cli` version.
+ComfyUI-Manager, their Python requirements and the selected `comfy-cli`
+version.
 
 **Reset** removes the local `app` folder. A new installation can then be
 created from scratch with the Install button.
