@@ -9,16 +9,7 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // 2) Optional examples repo (workflows)
-    // {
-    //   method: "shell.run",
-    //   params: {
-    //     message: "git clone https://github.com/comfyanonymous/ComfyUI_examples",
-    //     path: "workflows"
-    //   }
-    // },
-
-    // 3) ComfyUI-Manager
+    // 2) ComfyUI-Manager
     {
       method: "shell.run",
       params: {
@@ -27,25 +18,20 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // 4) Crear venv con Python
+    // 3) Create the virtual environment
     {
       method: "shell.run",
       params: {
         path: "app",
         message: [
-          // Elegir versión objetivo
           "uv python install {{env.PYTHON_VER || '3.12'}}",
-
-          // Borrar venv (cross-platform)
           "{{ platform === 'win32' ? 'if exist env rmdir /s /q env' : 'rm -rf env' }}",
-
-          // Crear venv con la versión elegida
           "uv venv --python {{env.PYTHON_VER || '3.12'}} env",
         ],
       },
     },
 
-    // 5) Instalar requisitos base de ComfyUI usando ese venv
+    // 4) Install ComfyUI and Manager requirements
     {
       method: "shell.run",
       params: {
@@ -61,7 +47,7 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // 6) Install Torch (variant-based) - NO xformers/flash/sage for now
+    // 5) Install Torch variant
     {
       method: "script.start",
       params: {
@@ -73,7 +59,24 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // 7) Link model folders to Pinokio drive
+    // 6) Install and validate comfy-cli in app/env
+    {
+      method: "shell.run",
+      params: {
+        venv: "env",
+        path: "app",
+        env: {
+          COMFY_NO_TELEMETRY: "1",
+        },
+        message: [
+          "python -m pip install comfy-cli=={{env.COMFY_CLI_VER || '1.12.0'}}",
+          "python -m comfy_cli --version",
+          "python -m comfy_cli --here --skip-prompt which",
+        ],
+      },
+    },
+
+    // 7) Link model folders to the Pinokio drive
     {
       method: "fs.link",
       params: {
@@ -114,7 +117,7 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // output link
+    // 8) Link output folder
     {
       method: "fs.link",
       params: {
@@ -130,21 +133,7 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // 8) Optional Flux Schnell autodownload
-    // {
-    //   when: "{{['true','1'].includes(String(env.FLUX_AUTODOWNLOAD).toLowerCase())}}",
-    //   method: "script.start",
-    //   params: {
-    //     uri: "hf.json",
-    //     params: {
-    //       repo: "Comfy-Org/flux1-schnell",
-    //       files: "flux1-schnell-fp8.safetensors",
-    //       path: "app/models/checkpoints"
-    //     }
-    //   }
-    // },
-
-    // 9) First launch to print local URL and stop
+    // 9) Smoke test: launch directly and stop after the URL appears
     {
       method: "shell.run",
       params: {
@@ -152,34 +141,19 @@ module.exports = async (kernel, info) => {
         env: {
           PYTORCH_ENABLE_MPS_FALLBACK: "1",
           TOKENIZERS_PARALLELISM: "false",
+          COMFY_NO_TELEMETRY: "1",
         },
         path: "app",
         message: [
-          "{{platform === 'win32' && gpu === 'amd' ? 'python main.py --directml' : 'python main.py'}}",
+          "{{platform === 'win32' && gpu === 'amd' ? 'python main.py --directml --listen 127.0.0.1 --port 8188' : 'python main.py --listen 127.0.0.1 --port 8188'}}",
         ],
         on: [
-          { event: "/http:\\/\\/[a-zA-Z0-9.]+:[0-9]+/", kill: true },
+          { event: "/http:\\/\\/[a-zA-Z0-9._-]+:[0-9]+/", kill: true },
           { event: "/errno/i", break: false },
           { event: "/error:/i", break: false },
         ],
       },
     },
-
-    // 10) Optional extra workflows
-    // {
-    //   method: "shell.run",
-    //   params: {
-    //     message: "git clone https://github.com/comfyanonymous/ComfyUI_examples",
-    //     path: "app/user/default/workflows"
-    //   }
-    // }
-    // {
-    //   method: "shell.run",
-    //   params: {
-    //     message: "git clone https://github.com/cocktailpeanut/comfy_json_workflow",
-    //     path: "app/user/default/workflows"
-    //   }
-    // }
   ];
 
   return {
