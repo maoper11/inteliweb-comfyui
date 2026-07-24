@@ -35,14 +35,13 @@ module.exports = async (kernel, info) => {
         path: "app",
         venv: "env",
         env: {
-          COMFY_NO_TELEMETRY: "{{env.COMFY_NO_TELEMETRY || ''}}",
+          COMFY_NO_TELEMETRY: "1",
         },
         message: [
           "uv pip install -r requirements.txt",
           "uv pip install -r custom_nodes/ComfyUI-Manager/requirements.txt",
           "python -m pip install --upgrade comfy-cli=={{env.COMFY_CLI_VER || '1.12.0'}}",
           "python -m comfy_cli --version",
-          "python -m comfy_cli --here --skip-prompt which",
         ],
       },
     },
