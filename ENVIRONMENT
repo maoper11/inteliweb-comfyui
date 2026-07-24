@@ -236,7 +236,7 @@ PYTHON_VER=3.12
 
 # - Apple Silicon (M-series) → installs torch with MPS automatically
 
-# - Intel Mac → installs CPU version automatically
+# - Intel Mac → CPU build automatically
 
 #
 
@@ -278,6 +278,16 @@ PYTHON_VER=3.12
 
 ##########################################################################
 TORCH_VARIANT=auto
+
+##########################################################################
+
+# COMFY-CLI SUPERVISOR
+
+# Pinned for reproducible ComfyUI-Manager restart behavior.
+
+##########################################################################
+COMFY_CLI_VER=1.12.0
+COMFY_NO_TELEMETRY=1
 
 ##########################################################################
 
