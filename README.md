@@ -32,16 +32,15 @@ COMFY_VER=latest
 PYTHON_VER=3.12
 TORCH_VARIANT=auto
 COMFY_CLI_VER=1.12.0
-COMFY_NO_TELEMETRY=1
 ```
 
 The installer automatically selects the configured PyTorch build, creates an
 isolated environment, installs ComfyUI-Manager and installs the selected
 `comfy-cli` supervisor version.
 
-Only these five user-facing options are exposed. Pinokio sharing, autolaunch
-and cache variables are left to Pinokio's own defaults instead of being shown
-in the installer configuration screen.
+Only these four user-facing options are exposed. Pinokio sharing, autolaunch,
+cache and telemetry settings are managed internally instead of being shown in
+the installer configuration screen.
 
 ---
 
@@ -67,6 +66,10 @@ python -m comfy_cli --here --skip-prompt launch -- --listen 127.0.0.1 --port 818
 
 Windows AMD adds `--directml` to the ComfyUI arguments.
 
+`COMFY_NO_TELEMETRY=1` is set internally for Install, Update and Start, so
+comfy-cli telemetry remains disabled without exposing another option in the
+configuration form.
+
 ### Known cosmetic warning
 
 A manual restart may print messages similar to:
@@ -91,9 +94,8 @@ python -m comfy_cli --version
 python -m comfy_cli --here --skip-prompt which
 ```
 
-`COMFY_NO_TELEMETRY=1` explicitly disables comfy-cli telemetry. Leaving it
-empty stops setting that explicit opt-out variable, while `--skip-prompt`
-still prevents automated Pinokio launches from waiting for interactive input.
+The installer and updater only print the installed comfy-cli version. The
+workspace check is kept as an optional manual diagnostic command.
 
 ---
 
