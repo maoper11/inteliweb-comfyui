@@ -28,14 +28,14 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // 4) Refresh Python requirements and the pinned comfy-cli supervisor
+    // 4) Refresh Python requirements and the selected comfy-cli version
     {
       method: "shell.run",
       params: {
         path: "app",
         venv: "env",
         env: {
-          COMFY_NO_TELEMETRY: "1",
+          COMFY_NO_TELEMETRY: "{{env.COMFY_NO_TELEMETRY || ''}}",
         },
         message: [
           "uv pip install -r requirements.txt",
