@@ -16,6 +16,8 @@ optimized defaults by Inteliweb AI.
 
 ✅ Automatic GPU detection (RTX 20/30/40/50, AMD, Apple Silicon)  
 ✅ Smart PyTorch & CUDA selection (cu128 / cu130 / DirectML / ROCm / CPU)  
+✅ Configurable port and single-GPU selection  
+✅ Multiple independent ComfyUI installations on one computer  
 ✅ Works on Windows, Linux and macOS  
 ✅ Clean, reproducible environment  
 ✅ ComfyUI-Manager restart support through comfy-cli  
@@ -31,6 +33,8 @@ Leave everything at its default value:
 COMFY_VER=latest
 PYTHON_VER=3.12
 TORCH_VARIANT=auto
+COMFY_PORT=8188
+COMFY_GPU_DEVICE=auto
 COMFY_CLI_VER=1.12.0
 ```
 
@@ -38,9 +42,61 @@ The installer automatically selects the configured PyTorch build, creates an
 isolated environment, installs ComfyUI-Manager and installs the selected
 `comfy-cli` supervisor version.
 
-Only these four user-facing options are exposed. Pinokio sharing, autolaunch,
-cache and telemetry settings are managed internally instead of being shown in
-the installer configuration screen.
+These six user-facing options are exposed. Pinokio sharing, autolaunch, cache
+and telemetry settings are managed internally instead of being shown in the
+installer configuration screen.
+
+---
+
+## 🔌 Port and GPU Selection
+
+`COMFY_PORT` selects the local port used by that installation:
+
+```text
+COMFY_PORT=8188
+```
+
+Use a different port for every ComfyUI installation that must run at the same
+time.
+
+`COMFY_GPU_DEVICE` accepts only one device:
+
+```text
+COMFY_GPU_DEVICE=auto  Default GPU
+COMFY_GPU_DEVICE=0     First GPU
+COMFY_GPU_DEVICE=1     Second GPU
+```
+
+Values such as `0,1` are intentionally unsupported. One installation can use
+only one GPU. To use two GPUs simultaneously, create two separate Pinokio
+installations and assign one GPU to each.
+
+### Two installations on the same GPU
+
+```text
+Installation 1: COMFY_PORT=8188, COMFY_GPU_DEVICE=0
+Installation 2: COMFY_PORT=8189, COMFY_GPU_DEVICE=0
+```
+
+### Two installations on different GPUs
+
+```text
+Installation 1: COMFY_PORT=8188, COMFY_GPU_DEVICE=0
+Installation 2: COMFY_PORT=8189, COMFY_GPU_DEVICE=1
+```
+
+### CPU mode
+
+```text
+TORCH_VARIANT=cpu
+```
+
+CPU mode adds `--cpu` and ignores `COMFY_GPU_DEVICE`. Linux AMD with
+`TORCH_VARIANT=auto` and Intel Mac also use CPU mode. On Apple Silicon,
+`COMFY_GPU_DEVICE` is ignored and MPS is selected automatically.
+
+Invalid ports fall back to `8188`. Invalid GPU device values fall back to
+`auto`.
 
 ---
 
@@ -56,15 +112,16 @@ Supported scenarios include:
 - Restart after installing a custom node.
 - Automatic restart after installing Python dependencies during prestartup.
 - Multiple consecutive restarts in the same Pinokio session.
-- Stop and subsequent Start from Pinokio without leaving port 8188 occupied.
+- Stop and subsequent Start without leaving the configured port occupied.
 
-The normal launch command is equivalent to:
+The default launch is equivalent to:
 
 ```bash
 python -m comfy_cli --here --skip-prompt launch -- --listen 127.0.0.1 --port 8188
 ```
 
-Windows AMD adds `--directml` to the ComfyUI arguments.
+A selected NVIDIA or ROCm GPU adds `--cuda-device N`. Windows AMD DirectML adds
+`--directml` and optionally its device number. CPU mode adds `--cpu`.
 
 `COMFY_NO_TELEMETRY=1` is set internally for Install, Update and Start, so
 comfy-cli telemetry remains disabled without exposing another option in the
