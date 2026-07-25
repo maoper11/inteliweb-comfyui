@@ -71,7 +71,7 @@ module.exports = {
           {
             default: true,
             icon: "fa-solid fa-rocket",
-            text: "Open Web UI",
+            text: "Open ComfyUI",
             href: local.url,
           },
           {
