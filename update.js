@@ -8,10 +8,10 @@ module.exports = async (kernel, info) => {
       },
     },
 
-    // 2) Update ComfyUI only when tracking the latest branch
+    // 2) Update ComfyUI only when tracking the automatic/latest branch
     {
       when:
-        "{{String(env.COMFY_VER || 'latest').trim().toLowerCase() === 'latest'}}",
+        "{{['', 'auto', 'latest'].includes(String(env.COMFY_VER || 'auto').trim().toLowerCase())}}",
       method: "shell.run",
       params: {
         path: "app",
@@ -40,7 +40,7 @@ module.exports = async (kernel, info) => {
         message: [
           "uv pip install -r requirements.txt",
           "uv pip install -r custom_nodes/ComfyUI-Manager/requirements.txt",
-          "python -m pip install --upgrade comfy-cli=={{env.COMFY_CLI_VER || '1.12.0'}}",
+          "python -m pip install {{ (() => { const ver = String(env.COMFY_CLI_VER || '1.12.0').trim().toLowerCase(); return ['', 'auto', 'latest'].includes(ver) ? '--upgrade comfy-cli' : '--upgrade comfy-cli==' + ver; })() }}",
           "python -m comfy_cli --version",
         ],
       },
