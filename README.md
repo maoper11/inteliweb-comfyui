@@ -46,9 +46,9 @@ These six user-facing options are exposed. Pinokio sharing, autolaunch, cache
 and telemetry settings are managed internally instead of being shown in the
 installer configuration screen.
 
-`COMFY_VER=auto` installs and tracks the newest available ComfyUI version.
-`latest` remains accepted as a compatibility alias. A fixed tag can be used
-when an older workflow requires a specific ComfyUI release.
+`COMFY_VER=auto` installs and tracks the newest available ComfyUI version. A
+fixed tag such as `v0.28.0` can be used when an older workflow requires a
+specific ComfyUI release.
 
 `COMFY_CLI_VER=1.12.0` remains the validated default. Setting it to `auto`
 installs the newest comfy-cli release available from PyPI.
@@ -80,9 +80,12 @@ installations and assign one GPU to each.
 
 ### Two installations on the same GPU
 
+On a computer with a single GPU, both installations can keep automatic GPU
+selection:
+
 ```text
-Installation 1: COMFY_PORT=8188, COMFY_GPU_DEVICE=0
-Installation 2: COMFY_PORT=8189, COMFY_GPU_DEVICE=0
+Installation 1: COMFY_PORT=8188, COMFY_GPU_DEVICE=auto
+Installation 2: COMFY_PORT=8189, COMFY_GPU_DEVICE=auto
 ```
 
 ### Two installations on different GPUs
@@ -211,7 +214,7 @@ Leave `TORCH_VARIANT=auto`:
 
 ## 🔄 Update and Reset
 
-**Update** refreshes the installer, ComfyUI when `COMFY_VER=auto` or `latest`,
+**Update** refreshes the installer, ComfyUI when `COMFY_VER=auto`,
 ComfyUI-Manager, their Python requirements and the selected `comfy-cli`
 version. When `COMFY_CLI_VER=auto`, Update installs the newest available
 comfy-cli release.
