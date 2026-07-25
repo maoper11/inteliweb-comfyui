@@ -5,7 +5,7 @@ module.exports = async (kernel, info) => {
       method: "shell.run",
       params: {
         message:
-          "git clone --branch {{ (() => { let ver = String(env.COMFY_VER || 'latest').trim().toLowerCase(); if (ver === 'latest') return 'master'; if (/^v/.test(ver)) return ver; if (/^\\d/.test(ver)) return 'v' + ver; return ver; })() }} --depth 1 https://github.com/comfyanonymous/ComfyUI app",
+          "git clone --branch {{ (() => { let ver = String(env.COMFY_VER || 'auto').trim().toLowerCase(); if (['', 'auto', 'latest'].includes(ver)) return 'master'; if (/^v/.test(ver)) return ver; if (/^\\d/.test(ver)) return 'v' + ver; return ver; })() }} --depth 1 https://github.com/comfyanonymous/ComfyUI app",
       },
     },
 
@@ -69,7 +69,7 @@ module.exports = async (kernel, info) => {
           COMFY_NO_TELEMETRY: "1",
         },
         message: [
-          "python -m pip install comfy-cli=={{env.COMFY_CLI_VER || '1.12.0'}}",
+          "python -m pip install {{ (() => { const ver = String(env.COMFY_CLI_VER || '1.12.0').trim().toLowerCase(); return ['', 'auto', 'latest'].includes(ver) ? '--upgrade comfy-cli' : 'comfy-cli==' + ver; })() }}",
           "python -m comfy_cli --version",
         ],
       },
