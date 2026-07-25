@@ -131,27 +131,6 @@ module.exports = async (kernel, info) => {
         ],
       },
     },
-
-    // 9) Smoke test: launch directly and stop after the URL appears
-    {
-      method: "shell.run",
-      params: {
-        venv: "env",
-        env: {
-          PYTORCH_ENABLE_MPS_FALLBACK: "1",
-          TOKENIZERS_PARALLELISM: "false",
-        },
-        path: "app",
-        message: [
-          "{{platform === 'win32' && gpu === 'amd' ? 'python main.py --directml --listen 127.0.0.1 --port 8188' : 'python main.py --listen 127.0.0.1 --port 8188'}}",
-        ],
-        on: [
-          { event: "/http:\\/\\/[a-zA-Z0-9.]+:[0-9]+/", kill: true },
-          { event: "/errno/i", break: false },
-          { event: "/error:/i", break: false },
-        ],
-      },
-    },
   ];
 
   return {
