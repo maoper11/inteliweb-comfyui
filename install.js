@@ -5,7 +5,7 @@ module.exports = async (kernel, info) => {
       method: "shell.run",
       params: {
         message:
-          "git clone --branch {{ (() => { let ver = String(env.COMFY_VER || 'auto').trim().toLowerCase(); if (['', 'auto', 'latest'].includes(ver)) return 'master'; if (/^v/.test(ver)) return ver; if (/^\\d/.test(ver)) return 'v' + ver; return ver; })() }} --depth 1 https://github.com/comfyanonymous/ComfyUI app",
+          "git clone --branch {{ (() => { let ver = String(env.COMFY_VER || 'auto').trim().toLowerCase(); if (['', 'auto', 'latest'].includes(ver)) return 'master'; if (/^v/.test(ver)) return ver; if (/^\\d/.test(ver)) return 'v' + ver; return ver; })() }} --depth 1 https://github.com/Comfy-Org/ComfyUI.git app",
       },
     },
 
