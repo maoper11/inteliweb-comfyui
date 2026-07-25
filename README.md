@@ -30,7 +30,7 @@ optimized defaults by Inteliweb AI.
 Leave everything at its default value:
 
 ```text
-COMFY_VER=latest
+COMFY_VER=auto
 PYTHON_VER=3.12
 TORCH_VARIANT=auto
 COMFY_PORT=8188
@@ -46,18 +46,25 @@ These six user-facing options are exposed. Pinokio sharing, autolaunch, cache
 and telemetry settings are managed internally instead of being shown in the
 installer configuration screen.
 
+`COMFY_VER=auto` installs and tracks the newest available ComfyUI version.
+`latest` remains accepted as a compatibility alias. A fixed tag can be used
+when an older workflow requires a specific ComfyUI release.
+
+`COMFY_CLI_VER=1.12.0` remains the validated default. Setting it to `auto`
+installs the newest comfy-cli release available from PyPI.
+
 ---
 
 ## 🔌 Port and GPU Selection
 
-`COMFY_PORT` selects the local port used by that installation:
+Keep the default port for a normal single installation:
 
 ```text
 COMFY_PORT=8188
 ```
 
-Use a different port for every ComfyUI installation that must run at the same
-time.
+Change `COMFY_PORT` only when multiple ComfyUI installations must run at the
+same time. Every simultaneous installation needs a different port.
 
 `COMFY_GPU_DEVICE` accepts only one device:
 
@@ -204,9 +211,10 @@ Leave `TORCH_VARIANT=auto`:
 
 ## 🔄 Update and Reset
 
-**Update** refreshes the installer, ComfyUI when `COMFY_VER=latest`,
+**Update** refreshes the installer, ComfyUI when `COMFY_VER=auto` or `latest`,
 ComfyUI-Manager, their Python requirements and the selected `comfy-cli`
-version.
+version. When `COMFY_CLI_VER=auto`, Update installs the newest available
+comfy-cli release.
 
 **Reset** removes the local `app` folder. A new installation can then be
 created from scratch with the Install button.
