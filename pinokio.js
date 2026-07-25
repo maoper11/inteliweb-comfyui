@@ -1,5 +1,5 @@
 module.exports = {
-  version: "1.2-beta",
+  version: "1.2",
   title: "ComfyUI",
   description:
     "One-click ComfyUI + Torch + Python installer by Inteliweb AI. https://github.com/Comfy-Org",
