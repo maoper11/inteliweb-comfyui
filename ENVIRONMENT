@@ -8,6 +8,8 @@
 # COMFY_VER=latest
 # PYTHON_VER=3.12
 # TORCH_VARIANT=auto
+# COMFY_PORT=8188
+# COMFY_GPU_DEVICE=auto
 # COMFY_CLI_VER=1.12.0
 #
 ##########################################################################
@@ -61,9 +63,41 @@ PYTHON_VER=3.12
 # - 2.7.0-rocm6.3 → Linux AMD with ROCm configured
 #
 # CPU option:
-# - cpu
+# - cpu            → use this when the computer has no supported GPU
 ##########################################################################
 TORCH_VARIANT=auto
+
+##########################################################################
+# COMFYUI PORT
+#
+# - 8188 → default ComfyUI port
+# - Use a different port for each simultaneous Pinokio installation.
+#
+# Examples:
+# - First installation  → 8188
+# - Second installation → 8189
+##########################################################################
+COMFY_PORT=8188
+
+##########################################################################
+# GPU DEVICE
+#
+# - auto → use the default GPU (RECOMMENDED for most users)
+# - 0    → first GPU
+# - 1    → second GPU
+#
+# Only one GPU number is accepted. Do not use values such as 0,1.
+# This setting is ignored when TORCH_VARIANT=cpu and on macOS.
+#
+# Two installations on the same GPU:
+# - Installation 1: COMFY_PORT=8188 and COMFY_GPU_DEVICE=0
+# - Installation 2: COMFY_PORT=8189 and COMFY_GPU_DEVICE=0
+#
+# Two installations on different GPUs:
+# - Installation 1: COMFY_PORT=8188 and COMFY_GPU_DEVICE=0
+# - Installation 2: COMFY_PORT=8189 and COMFY_GPU_DEVICE=1
+##########################################################################
+COMFY_GPU_DEVICE=auto
 
 ##########################################################################
 # COMFY-CLI VERSION
