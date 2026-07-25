@@ -19,8 +19,7 @@
 #
 # Allowed values:
 # - auto    → install the newest available ComfyUI version (RECOMMENDED)
-# - latest  → alias of auto, kept for compatibility
-# - v0.18.2 → example of a specific release tag
+# - v0.28.0 → example of a specific release tag
 #
 # Notes:
 # - Use "auto" for most users.
@@ -91,9 +90,9 @@ COMFY_PORT=8188
 # Only one GPU number is accepted. Do not use values such as 0,1.
 # This setting is ignored when TORCH_VARIANT=cpu and on macOS.
 #
-# Two installations on the same GPU:
-# - Installation 1: COMFY_PORT=8188 and COMFY_GPU_DEVICE=0
-# - Installation 2: COMFY_PORT=8189 and COMFY_GPU_DEVICE=0
+# Two installations on the same GPU (single-GPU computer):
+# - Installation 1: COMFY_PORT=8188 and COMFY_GPU_DEVICE=auto
+# - Installation 2: COMFY_PORT=8189 and COMFY_GPU_DEVICE=auto
 #
 # Two installations on different GPUs:
 # - Installation 1: COMFY_PORT=8188 and COMFY_GPU_DEVICE=0
