@@ -3,7 +3,7 @@ module.exports = {
   title: "ComfyUI",
   description:
     "One-click ComfyUI + Torch + Python installer by Inteliweb AI. https://github.com/Comfy-Org",
-  icon: "icon.jpeg",
+  icon: "assets/icon.jpeg",
 
   menu: async (kernel, info) => {
     const installed = info.exists("app/env") && info.exists("app/main.py");
