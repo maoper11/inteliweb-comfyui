@@ -1,113 +1,207 @@
 ##########################################################################
+
 #
+
 # Inteliweb AI — ComfyUI Pinokio Installer
+
 # https://www.youtube.com/@InteliwebAI
+
 #
+
 # QUICK START (recommended for most users):
+
 #
+
 # COMFY_VER=auto
+
 # PYTHON_VER=3.12
+
 # TORCH_VARIANT=auto
+
 # COMFY_PORT=8188
+
 # COMFY_GPU_DEVICE=auto
-# COMFY_CLI_VER=1.12.0
+
+# COMFY_CLI_VER=auto
+
 #
+
 ##########################################################################
 
 ##########################################################################
+
 # COMFYUI VERSION
+
 #
+
 # Allowed values:
-# - auto    → install the newest available ComfyUI version (RECOMMENDED)
+
+# - auto → install the newest available ComfyUI version (RECOMMENDED)
+
 # - v0.28.0 → example of a specific release tag
+
 #
+
 # Notes:
+
 # - Use "auto" for most users.
+
 # - Use a fixed version only when an older workflow requires it.
+
 ##########################################################################
 COMFY_VER=auto
 
 ##########################################################################
+
 # PYTHON VERSION
+
 #
+
 # Allowed values:
+
 # - 3.10 → best compatibility with older custom nodes
+
 # - 3.11 → good balance
+
 # - 3.12 → RECOMMENDED for most users
+
 # - 3.13 → only if your nodes already support it
+
 ##########################################################################
 PYTHON_VER=3.12
 
 ##########################################################################
+
 # TORCH VARIANT — PyTorch / GPU backend
+
 #
+
 # RECOMMENDED FOR MOST USERS
+
 # - auto
+
 #
+
 # Default auto behavior:
+
 # - Windows NVIDIA → torch 2.10.0 + cu130
-# - Linux NVIDIA   → torch 2.10.0 + cu130
-# - Windows AMD    → DirectML
-# - Linux AMD      → CPU fallback
-# - Apple Silicon  → MPS build
-# - Intel Mac      → CPU build
+
+# - Linux NVIDIA → torch 2.10.0 + cu130
+
+# - Windows AMD → DirectML
+
+# - Linux AMD → CPU fallback
+
+# - Apple Silicon → MPS build
+
+# - Intel Mac → CPU build
+
 #
+
 # NVIDIA options:
+
 # - latest-cu130
+
 # - 2.10.0-cu130
+
 # - 2.9.1-cu128
+
 # - 2.8.0-cu128
+
 #
+
 # AMD options:
-# - directml       → Windows AMD
+
+# - directml → Windows AMD
+
 # - 2.7.0-rocm6.3 → Linux AMD with ROCm configured
+
 #
+
 # CPU option:
-# - cpu            → use this when the computer has no supported GPU
+
+# - cpu → use this when the computer has no supported GPU
+
 ##########################################################################
 TORCH_VARIANT=auto
 
 ##########################################################################
+
 # COMFYUI PORT
+
 #
+
 # - Keep 8188 for a normal single installation.
+
 # - Change it only when running multiple Pinokio ComfyUI installations at the
-#   same time. Every simultaneous installation must use a different port.
+
+# same time. Every simultaneous installation must use a different port.
+
 #
+
 # Examples:
-# - First simultaneous installation  → 8188
+
+# - First simultaneous installation → 8188
+
 # - Second simultaneous installation → 8189
+
 ##########################################################################
 COMFY_PORT=8188
 
 ##########################################################################
+
 # GPU DEVICE
+
 #
+
 # - auto → use the default GPU (RECOMMENDED for most users)
-# - 0    → first GPU
-# - 1    → second GPU
+
+# - 0 → first GPU
+
+# - 1 → second GPU
+
 #
+
 # Only one GPU number is accepted. Do not use values such as 0,1.
+
 # This setting is ignored when TORCH_VARIANT=cpu and on macOS.
+
 #
+
 # Two installations on the same GPU (single-GPU computer):
+
 # - Installation 1: COMFY_PORT=8188 and COMFY_GPU_DEVICE=auto
+
 # - Installation 2: COMFY_PORT=8189 and COMFY_GPU_DEVICE=auto
+
 #
+
 # Two installations on different GPUs:
+
 # - Installation 1: COMFY_PORT=8188 and COMFY_GPU_DEVICE=0
+
 # - Installation 2: COMFY_PORT=8189 and COMFY_GPU_DEVICE=1
+
 ##########################################################################
 COMFY_GPU_DEVICE=auto
 
 ##########################################################################
+
 # COMFY-CLI VERSION
+
 #
+
 # comfy-cli supervises ComfyUI and allows ComfyUI-Manager to perform manual
+
 # and automatic restarts without terminating the Pinokio Start session.
+
 #
+
 # Allowed values:
-# - 1.12.0 → validated version and current default (RECOMMENDED)
-# - auto   → install the newest comfy-cli version available from PyPI
+
+# - 1.15.0 → example of a specific release tag
+
+# - auto → install the newest comfy-cli version available from PyPI
+
 ##########################################################################
-COMFY_CLI_VER=1.12.0
+COMFY_CLI_VER=auto
